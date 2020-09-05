@@ -6,7 +6,7 @@
 			<h3>Name:{{customer.name}}</h3>
 			<h3>Lastname:{{customer.lastName}}</h3>
 			<h2>Customer ID:{{customer.id}}</h2>
-			<p>Customer info:
+			<p><span>Customer info:</span>
 				<br>
 			{{customer.info}}
 			</p>
@@ -42,9 +42,10 @@
 				width:30%;
 				min-height: 200px;
 				margin: 10px;
-				background-color:lighten(#576774,5%);
+				background-color:lighten(#576774,45%);
 				text-align: left;
 				border-radius: 5px;
+				box-shadow: 5px 5px 5px #576774;
 				img{
 					width: 80px;
 					height:80px;
@@ -54,6 +55,10 @@
 				}
 				>h3,h2,p{
 					margin-left: 10px;
+				}
+				span{
+					color: #6E6EFF;
+					font-weight: bold;
 				}
 			}
 		}

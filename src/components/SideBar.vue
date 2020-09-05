@@ -1,6 +1,7 @@
 <template>
-	<div id="SideBar" class="sidebar">
+	<div id="SideBar" class="sidebar" :style='[{backgroundColor:themeChange}]'>
 		<div class="sidebar__heading">
+			<!-- <span @click="menu()" >◄</span> -->
 			<h2>Powered by</h2>
 			<div class="sidebar__heading_powered">
 			<img src="../assets/Vue.png" alt="Logo">
@@ -10,28 +11,28 @@
 			<hr>
 		<h4>Меню</h4>
 		<ul>
-			<li @click="change('panel')"><img src="../assets/panel.png" alt="Панель">Панель</li>
-			<li @click="change('extensions')"><img src="../assets/extensions.png" alt="Расширения">Расширения</li>
-			<li @click="change('design')"><img src="../assets/design.png" alt="Дизайн">Дизайн</li>
-			<li @click="change('sales')"><img src="../assets/sales.png" alt="Продажи">Продажи <span class='salesCount'>
+			<li @click="change('panel')"  ><img src="../assets/panel.png" alt="Панель">Панель</li>
+			<li @click="change('extensions')" ><img src="../assets/extensions.png" alt="Расширения">Расширения</li>
+			<li @click="change('design')" ><img src="../assets/design.png" alt="Дизайн">Дизайн</li>
+			<li @click="change('sales')" ><img src="../assets/sales.png" alt="Продажи">Продажи <span class='salesCount'>
 			 {{activeProjects}} </span> </li>
-			<li @click="change('customers')"><img src="../assets/customers.png" alt="Покупатели">Покупатели</li>
-			<li @click="change('marketing')"><img src="../assets/marketing.png" alt="Маркетинг">Маркетинг</li>
-			<li @click="change('system')"><img src="../assets/system.png" alt="Система">Система</li>
+			<li @click="change('customers')" ><img src="../assets/customers.png" alt="Покупатели">Покупатели</li>
+			<li @click="change('marketing')" ><img src="../assets/marketing.png" alt="Маркетинг">Маркетинг</li>
+			<li @click="change('system')" ><img src="../assets/system.png" alt="Система">Система</li>
 		</ul>
 
 	<hr>
 		<div class="sidebar__support">
 			<h4>Поддержка</h4>
 			<ul>
-				<li><img src="../assets/support.png" alt="Нужна помощь?">Нужна помощь?</li>
-				<li><img src="../assets/contacts.png" alt="Контакты">Контакты</li>
+				<li @click="change('help')"><img src="../assets/support.png" alt="Нужна помощь?">Нужна помощь?</li>
+				<li @click="change('contacts')"><img src="../assets/contacts.png" alt="Контакты">Контакты</li>
 			</ul>
-			<h4>Settings</h4>
+			<h4>Настройки</h4>
 			<ul>
 				<li @click="change('settings')"><img src="../assets/settings.png" alt="Настройки">Настройки</li>
 				<li @click="change('themes')"><img src="../assets/themes.png" alt="Темы">Темы</li>
-				<li @click="logout()"><img src="../assets/logout.png" alt="Выйти">Выйти</li>
+				<li @click="logout('Вход не выполнен')"><img src="../assets/logout.png" alt="Выйти">Выйти</li>
 			</ul>
 
 		</div>
@@ -46,18 +47,38 @@
 		computed:{
 			activeProjects(){
 				return this.$store.getters.activeProjects;
+			},
+			themeChange(){
+				return this.$store.getters.theme;
+			},
+			userGet(){
+				return this.$store.getters.user;
 			}
 		},
 		methods:{
 			change(value){
 				this.$store.dispatch('screenSwitch',value);
-
 			},
-		logout() {
-			let result = confirm('Выйти?');
-			if (result) {
-				alert('Вы вышли из системы');
-			}
+			logout(string) {
+				if (this.userGet === string) {
+					alert("Вы не авторизованы");
+				}else{
+				let result = confirm('Выйти?');
+					if (result) {
+						this.$store.dispatch('logout',string);
+						alert('Вы вышли из системы');
+					}else{
+						return;
+					}
+				}
+			},
+			menu(){
+				const sidebar = document.getElementById('SideBar');
+				console.log(sidebar);
+				const main = document.getElementById('mainScreen');
+				console.log(main);
+				sidebar.style.left = '-250px';
+				main.style.margin = '0 auto';
 			}
 		}
 	}
@@ -68,9 +89,12 @@
 	#SideBar {
 		display:block;
 		width:400px;
-		height:auto;
+		height:100vh;
 		background-color:#1e2933;
-		position:sticky;
+		position:relative;
+		top:0;
+		left:0;
+		z-index:9999;
 		color:white;
 		h4{
 		width:90%;
@@ -95,8 +119,8 @@
 			flex-direction:row;
 			justify-content:flex-start;
 			width:90%;
-			font-size:20px;
-			margin:10px auto;
+			font-size:.9em;
+			margin:5px auto;
 			padding:5px;
 			text-align:left; 
 			line-height:25px;

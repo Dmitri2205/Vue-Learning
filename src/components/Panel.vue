@@ -1,5 +1,5 @@
 <template>
-<div class="panel" style="position:sticky;top:0;">
+<div class="panel" style="position:sticky;top:-1px;">
 	<div class="panel__grid">
 		<div class="panel__grid_top">Panel</div>
 		<div class="panel__grid_left">
@@ -38,14 +38,21 @@ export default{
 	name:'Panel',
 	computed:{
 		getPosts(){
+			console.log(this.$store.getters.posts);
 		return this.$store.getters.posts;
 		}
 	},
 	methods:{
 		spanClick(value){
 			alert(value);
+		},
+		fetchPosts(){
+			this.$store.dispatch("fetchPosts");
 		}
-	}
+	},
+	mounted(){
+		this.fetchPosts();
+	},
 }
 
 </script>
@@ -61,18 +68,20 @@ export default{
 		height: 100%;
 		margin: 30px auto;
 		border:1px solid black;
+		box-sizing: border-box;
 		grid-template-areas:"top top"
 							"left  center";
 
 		grid-template-columns: 20% 80%;
 		grid-template-rows: 50px 1fr;
+		animation:panel .7s ease-in-out;
 		 &_top{
 			display: block;
 			width: 100%	;
-			height:49px;
+			height:50px;
 			grid-area: top;
 			font-size: 25px;
-			line-height:49px;
+			line-height:50px;
 			font-family:'Krona One',sans-serif ;
 			background-color: #1e2933;
 			color: white;
@@ -136,7 +145,22 @@ export default{
 				}
 			}
 		 }
-
+			@keyframes panel{
+				0%{
+					transition: .7s;
+					position: absolute;
+					top: 0;
+					left: -100%;
+					z-index: -9999;
+				}
+				100%{
+					transition: .7s;
+					position: absolute;
+					height: 100%;
+					top: 0;
+					left: 0;
+				}
+			}
 		}	
 	}
 </style>
